@@ -1,8 +1,8 @@
 # PCA: EXP-1  SUM ARRAY GPU
-<h3>ENTER YOUR NAME:-MABBU ADARSH</h3>
-<h3>ENTER YOUR REGISTER NO:-212223100028</h3>
-<h3>EX. NO:-01</h3>
-<h3>DATE:-03-09-2024</h3>
+<h3>ENTER YOUR NAME MABBU ADARSH</h3>
+<h3>ENTER YOUR REGISTER NO 212223100028</h3>
+<h3>EX. NO 01</h3>
+<h3>DATE 03-09-2024</h3>
 <h1> <align=center> SUM ARRAY ON HOST AND DEVICE </h3>
 PCA-GPU-based-vector-summation.-Explore-the-differences.
 i) Using the program sumArraysOnGPU-timer.cu, set the block.x = 1023. Recompile and run it. Compare the result with the execution configuration of block.x = 1024. Try to explain the difference and the reason.
@@ -29,7 +29,10 @@ Google Colab with NVCC Compiler
 6. Copy output data from the device to the host and verify the results against the host's sequential vector addition. Free memory on the host and the device.
 
 ## PROGRAM:
-TYPE YOUR CODE HERE
+```
+!pip install git+https://github.com/andreinechaev/nvcc4jupyter.git
+%load_ext nvcc4jupyter
+```
 ```
 %%cuda
 #include <cuda_runtime.h>
@@ -44,7 +47,7 @@ TYPE YOUR CODE HERE
     const cudaError_t error = call;                                            \
     if (error != cudaSuccess)                                                  \
     {                                                                          \
-        fprintf(stderr, "Error: %s:%d, ", _FILE, __LINE_);                 \
+        fprintf(stderr, "Error: %s:%d, ", __FILE__, __LINE__);                 \
         fprintf(stderr, "code: %d, reason: %s\n", error,                       \
                 cudaGetErrorString(error));                                    \
         exit(1);                                                               \
@@ -56,8 +59,8 @@ TYPE YOUR CODE HERE
     cublasStatus_t err;                                                        \
     if ((err = (call)) != CUBLAS_STATUS_SUCCESS)                               \
     {                                                                          \
-        fprintf(stderr, "Got CUBLAS error %d at %s:%d\n", err, _FILE_,       \
-                _LINE_);                                                     \
+        fprintf(stderr, "Got CUBLAS error %d at %s:%d\n", err, __FILE__,       \
+                __LINE__);                                                     \
         exit(1);                                                               \
     }                                                                          \
 }
@@ -70,8 +73,8 @@ TYPE YOUR CODE HERE
     curandStatus_t err;                                                        \
     if ((err = (call)) != CURAND_STATUS_SUCCESS)                               \
     {                                                                          \
-        fprintf(stderr, "Got CURAND error %d at %s:%d\n", err, _FILE_,       \
-                _LINE_);                                                     \
+        fprintf(stderr, "Got CURAND error %d at %s:%d\n", err, __FILE__,       \
+                __LINE__);                                                     \
         exit(1);                                                               \
     }                                                                          \
 }
@@ -81,8 +84,8 @@ TYPE YOUR CODE HERE
     cufftResult err;                                                           \
     if ( (err = (call)) != CUFFT_SUCCESS)                                      \
     {                                                                          \
-        fprintf(stderr, "Got CUFFT error %d at %s:%d\n", err, _FILE_,        \
-                _LINE_);                                                     \
+        fprintf(stderr, "Got CUFFT error %d at %s:%d\n", err, __FILE__,        \
+                __LINE__);                                                     \
         exit(1);                                                               \
     }                                                                          \
 }
@@ -97,7 +100,7 @@ TYPE YOUR CODE HERE
     cusparseStatus_t err;                                                      \
     if ((err = (call)) != CUSPARSE_STATUS_SUCCESS)                             \
     {                                                                          \
-        fprintf(stderr, "Got error %d at %s:%d\n", err, _FILE, __LINE_);   \
+        fprintf(stderr, "Got error %d at %s:%d\n", err, __FILE__, __LINE__);   \
         cudaError_t cuda_err = cudaGetLastError();                             \
         if (cuda_err != cudaSuccess)                                           \
         {                                                                      \
@@ -175,7 +178,7 @@ void sumArraysOnHost(float *A, float *B, float *C, const int N)
         C[idx] = A[idx] + B[idx];
     }
 }
-_global_ void sumArraysOnGPU(float *A, float *B, float *C, const int N)
+__global__ void sumArraysOnGPU(float *A, float *B, float *C, const int N)
 {
     int i = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -270,10 +273,9 @@ int main(int argc, char **argv)
 }
 ```
 ## OUTPUT:
-SHOW YOUR OUTPUT HERE
-![WhatsApp Image 2024-09-03 at 10 46 35_ddc3b9e4](https://github.com/user-attachments/assets/a9f04ad0-e383-4fdf-883f-5100888ba28a)
-## BLOCK SIZE 256:
-![WhatsApp Image 2024-09-03 at 10 46 35_47d7fe9c](https://github.com/user-attachments/assets/e442dd51-3c20-47f4-aaef-d1b4113209f3)
+![image](https://github.com/user-attachments/assets/f7a5b354-e0b2-4937-8fb2-a5e846db4072)
+
+![image](https://github.com/user-attachments/assets/d05b77c0-8189-44ab-9470-e756c3f117da)
 
 ## RESULT:
 Thus, Implementation of sum arrays on host and device is done in nvcc cuda using random number.
